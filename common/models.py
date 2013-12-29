@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
+
 
 class BusinessType(models.Model):
     """
@@ -17,7 +17,8 @@ class BusinessType(models.Model):
         verbose_name = u'Вид бизнеса'
         verbose_name_plural = u'Виды бизнеса'
 
-class Сompetence(models.Model):
+
+class Competence(models.Model):
     """
     Модель для сферы компетентности пользователя
     """
@@ -30,6 +31,7 @@ class Сompetence(models.Model):
     class Meta:
         verbose_name = u'Сфера компетенции'
         verbose_name_plural = u'Сферы компетенции'
+
 
 class Tag(models.Model):
     """
@@ -45,6 +47,7 @@ class Tag(models.Model):
     class Meta:
         verbose_name = u'Тег'
         verbose_name_plural = u'Теги'
+
 
 class UserTag(models.Model):
     """
@@ -62,6 +65,23 @@ class UserTag(models.Model):
         verbose_name = u'Пользовательский тег'
         verbose_name_plural = u'Пользовательские теги'
 
+
+class UserRating(models.Model):
+    """
+    Модель для пользовательского рейтинга
+    """
+    author = models.ForeignKey(User, verbose_name=u'Автор оценки', related_name='author_rating')
+    target = models.ForeignKey(User, verbose_name=u'Кому была поставлена оценка', related_name='target_rating')
+    rating = models.DecimalField(decimal_places=2, max_digits=5, verbose_name=u'Рейтинг пользователя')
+
+    def __unicode__(self):
+        return u'{}: {} -> {}'.format(self.rating, self.author, self.target)
+
+    class Meta:
+        verbose_name = u'Пользовательский рейтинг'
+        verbose_name_plural = u'Пользовательские рейтинги'
+
+
 class UserProfile(models.Model):
     """
     Модель для профайлов пользователя
@@ -70,4 +90,11 @@ class UserProfile(models.Model):
     phone = models.CharField(max_length=20, verbose_name=u'Номер телефона')
     rating = models.DecimalField(decimal_places=2, max_digits=5, verbose_name=u'Рейтинг пользователя')
     bType = models.ForeignKey(BusinessType, verbose_name=u'Вид бизнеса', related_name='profiles')
-    competence = models.ForeignKey(Сompetence, verbose_name=u'Сфера компетенции', related_name='profiles')
+    competence = models.ForeignKey(Competence, verbose_name=u'Сфера компетенции', related_name='profiles')
+
+    def __unicode__(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name = u'Профиль пользователя'
+        verbose_name_plural = u'Профили пользователей'
