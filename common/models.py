@@ -88,9 +88,9 @@ class UserProfile(models.Model):
     """
     user = models.ForeignKey(User, verbose_name=u'Пользователь')
     phone = models.CharField(max_length=20, verbose_name=u'Номер телефона')
-    rating = models.DecimalField(decimal_places=2, max_digits=5, verbose_name=u'Рейтинг пользователя')
-    bType = models.ForeignKey(BusinessType, verbose_name=u'Вид бизнеса', related_name='profiles')
-    competence = models.ForeignKey(Competence, verbose_name=u'Сфера компетенции', related_name='profiles')
+    rating = models.DecimalField(decimal_places=2, max_digits=5, default=1.0, verbose_name=u'Рейтинг пользователя')
+    bTypes = models.ManyToManyField(BusinessType, verbose_name=u'Вид бизнеса', related_name='profiles')
+    competences = models.ManyToManyField(Competence, verbose_name=u'Сфера компетенции', related_name='profiles')
 
     def __unicode__(self):
         return self.user.username
