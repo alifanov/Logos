@@ -50,4 +50,11 @@ class AddUserView(FormView):
         password = User.objects.make_random_password()
         new_user = User.objects.create_user(username=username, password=password, email=form.cleaned_data['email'])
         UserProfile.objects.create(user=new_user, phone=form.cleaned_data['phone'])
+        self.added = True
         return super(AddUserView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AddUserView, self).get_context_data(**kwargs)
+        if hasattr(self, 'added'):
+            ctx['added'] = True
+        return ctx
