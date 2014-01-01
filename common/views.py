@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.views.generic import TemplateView, FormView, View
 from common.forms import NewUserForm
 from django.contrib.auth.models import User
-from django.template.defaultfilters import slugify
+from pytils.translit import slugify
 from django.http import HttpResponse
 from common.models import UserProfile, Competence, BusinessType, UserTag
 # Create your views here.
