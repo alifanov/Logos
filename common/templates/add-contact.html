@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="container">
+        <form method="POST" role="form" class="form-add">{% csrf_token %}
+            <div class="panel panel-default ">
+                <div class="panel-heading">Добавить нового участника сети {{ form.non_field_errors }}</div>
+                <div class="panel-body">
+                    {% for field in form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {% if field.errors %}
+                                <div class="alert alert-danger">
+                                {{ field.errors }}
+                                </div>
+                            {% endif %}
+                            {% render_field field class+="form-control" %}
+                        </div>
+                    {% endfor %}
+
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Добавить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

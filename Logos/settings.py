@@ -1,5 +1,7 @@
 # Django settings for Logos project.
+import os
 
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -70,6 +72,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+    BASE_DIR+'/Logos/static/',
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -127,6 +130,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'south',
     'common',
+    'widget_tweaks',
 )
 
 # A sample logging configuration. The only tangible logging

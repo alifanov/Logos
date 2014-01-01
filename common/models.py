@@ -56,7 +56,7 @@ class UserTag(models.Model):
     name = models.CharField(max_length=10, verbose_name=u'Тег', unique=True)
     slug = models.CharField(max_length=20, verbose_name=u'Slug для тега', unique=True)
     author = models.ForeignKey(User, verbose_name=u'Автор тега', related_name='author_tags')
-    target = models.ForeignKey(User, verbose_name=u'Кому тег был проставлен', related_name='tags')
+    target = models.ForeignKey(User, verbose_name=u'Кому тег был проставлен', related_name='tags', null=True)
 
     def __unicode__(self):
         return self.name
