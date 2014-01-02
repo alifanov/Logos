@@ -62,7 +62,9 @@
         {% for item in users %}
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    {{ item.last_name }} {{ item.first_name }}
+                    <a href="{% url 'user-detail' username=item.username %}">
+                        {{ item.profile.get_name }}
+                    </a>
                 </div>
                 <div class="panel-body">
                     Теги: {{ item.profile.get_tags|safe }}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+
+{% block extra_scripts %}
+    <script type="text/javascript">
+        $(function()
+        {
+            $('select#id_bTypes').selectize({
+                plugins: ['remove_button'],
+                create: function(input) {
+                    $.ajax({
+                        url: '/btypes/add/',
+                        type: 'POST',
+                        data: {'competence': input, 'csrfmiddlewaretoken':$.cookie('csrftoken')},
+                    });
+                    return {
+                        value: input,
+                        text: input
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Личный кабинет пользователя {{ request.user.profile.get_name }}</h1>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form method="POST" action="{% url 'personal' %}" enctype="multipart/form-data">{% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-4">
+                            {% if request.user.profile.photo %}
+                                <img src="{{ MEDIA_URL }}{{ request.user.profile.photo }}" class="img-thumbnail" />
+                            {% endif %}
+                            <div class="form-group">
+                                <label>Фото</label>
+                                <input type="file" name="photo" />
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                {{ userForm.last_name.label_tag }}
+                                {% render_field userForm.last_name class+="form-control" %}
+                            </div>
+                            <div class="form-group">
+                                {{ userForm.first_name.label_tag }}
+                                {% render_field userForm.first_name class+="form-control" %}
+                            </div>
+                            <div class="form-group">
+                                {{ updateForm.phone.label_tag }}
+                                {% render_field updateForm.phone class+="form-control" %}
+                            </div>
+                            <div class="form-group">
+                                {{ updateForm.tags.label_tag }}
+                                {{ updateForm.tags }}
+                            </div>
+                            <div class="form-group">
+                                {{ updateForm.competences.label_tag }}
+                                {{ updateForm.competences }}
+                            </div>
+                            <div class="form-group">
+                                {{ updateForm.bTypes.label_tag }}
+                                {{ updateForm.bTypes }}
+                            </div>
+                            <div class="form-group">
+                                {{ userForm.tags.label_tag }}
+                                {{ userForm.tags }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

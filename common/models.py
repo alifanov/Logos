@@ -91,10 +91,16 @@ class UserProfile(models.Model):
     rating = models.DecimalField(decimal_places=2, max_digits=5, default=1.0, verbose_name=u'Рейтинг пользователя')
     bTypes = models.ManyToManyField(BusinessType, verbose_name=u'Вид бизнеса', related_name='profiles')
     competences = models.ManyToManyField(Competence, verbose_name=u'Сфера компетенции', related_name='profiles')
-    photo = models.ImageField(upload_to='uploads/', verbose_name=u'Фото', blank=True)
+    photo = models.ImageField(upload_to='uploads/', verbose_name=u'Фото', null=True)
 
     def __unicode__(self):
         return self.user.username
+
+    def get_name(self):
+        if self.user.first_name and self.user.last_name:
+            return u'{} {}'.format(self.user.first_name, self.user.last_name)
+        else:
+            return self.user.username
 
     def get_tags(self):
         tags = [u'<a href="?tags={0}">{1}</a>'.format(tag.slug, tag.name) for tag in self.user.tags.all()]

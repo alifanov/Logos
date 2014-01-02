@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.contrib import messages
-from django.views.generic import TemplateView, FormView, View, ListView
-from common.forms import NewUserForm
+from django.views.generic import TemplateView, FormView, View, ListView, DetailView
+from common.forms import NewUserForm, ImageForm, UpdateProfileForm, UpdateUserForm
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, login, authenticate
 from pytils.translit import slugify
@@ -193,6 +193,8 @@ class AddUserView(FormView):
         for name in form.cleaned_data['competences']:
             comp = Competence.objects.get(name=name)
             new_user_profile.competences.add(comp)
+        imageForm = ImageForm(self.request.POST, self.request.FILES, instance=new_user_profile)
+        imageForm.save()
         new_user_profile.save()
         ctx = self.get_context_data()
         ctx['added'] = True
@@ -201,4 +203,33 @@ class AddUserView(FormView):
     def get_context_data(self, **kwargs):
         ctx = super(AddUserView, self).get_context_data(**kwargs)
         ctx['add_active_link'] = True
+        return ctx
+
+class UserDetailView(DetailView):
+    model = User
+    template_name = 'user-detail.html'
+    context_object_name = 'usr'
+
+    def get_object(self, queryset=None):
+        return User.objects.get(username=self.kwargs['username'])
+
+class PersonalView(TemplateView):
+    template_name = 'personal.html'
+
+    def post(self, request, *args, **kwargs):
+        userForm = UpdateUserForm(request.POST, request.FILES, instance=request.user)
+        if userForm.is_valid():
+            userForm.save()
+        profileForm = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if profileForm.is_valid():
+            profileForm.save()
+        return self.get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PersonalView, self).get_context_data(**kwargs)
+        print dir(self.request.user)
+        form = UpdateProfileForm(instance=self.request.user.profile)
+        userForm = UpdateUserForm(instance=self.request.user)
+        ctx['updateForm'] = form
+        ctx['userForm'] = userForm
         return ctx

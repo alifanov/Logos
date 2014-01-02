@@ -9,7 +9,7 @@ from registration.forms import RegistrationFormUniqueEmail
 from registration.views import RegistrationView
 
 from common.views import HomeView, AddUserView, AddCompetenceView, AddBusinessTypeView, AddUserTagView,\
-    logout_view, LoginView, GetAccessView
+    logout_view, LoginView, GetAccessView, UserDetailView, PersonalView
 
 urlpatterns = patterns('',
     # Examples:
@@ -18,6 +18,8 @@ urlpatterns = patterns('',
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^get-access/$', GetAccessView.as_view(), name='get-access'),
     url(r'^user/add/$', AddUserView.as_view(), name='add-user'),
+    url(r'^personal/$', PersonalView.as_view(), name='personal'),
+    url(r'^user/(?P<username>.*)/$', UserDetailView.as_view(), name='user-detail'),
     url(r'^competence/add/$', AddCompetenceView.as_view(), name='add-competence'),
     url(r'^tag/add/$', AddUserTagView.as_view(), name='add-user-tag'),
     url(r'^btype/add/$', AddBusinessTypeView.as_view(), name='add-business-type'),
@@ -30,5 +32,6 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT})
+    url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 )

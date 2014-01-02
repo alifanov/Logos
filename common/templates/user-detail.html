@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Информация о пользователе {{ usr.username }}</h1>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{ usr.profile.get_name }}
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        {% if usr.profile.photo %}
+                            <a href="#" class="thumbnail">
+                                <img src="{{ usr.profile.photo }}" class="img-thumbnail" />
+                            </a>
+                        {% else %}
+                            <img src="{{ STATIC_URL }}img/user-detail.png" class="img-thumbnail"/>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-10">
+                        <p>
+                            <strong>Телефон: </strong> {{ usr.profile.phone }}
+                        </p>
+
+                        <p>
+                            <strong>Email: </strong> {{ usr.email }}
+                        </p>
+                        <p>
+                            <strong>Теги: </strong> {{ usr.profile.get_tags|safe }}
+                        </p>
+                        <p>
+                            <strong>Сфера компетенции: </strong> {{ usr.profile.get_competences|safe }}
+                        </p>
+                        <p>
+                            <strong>Вид бизснеса: </strong> {{ usr.profile.get_btypes|safe }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

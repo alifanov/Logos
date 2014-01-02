@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="container">
-        <form method="POST" role="form" class="form-add">{% csrf_token %}
+        <form method="POST" role="form" class="form-add" enctype="multipart/form-data">{% csrf_token %}
             <div class="panel panel-default ">
                 <div class="panel-heading">Добавить нового участника сети {{ form.non_field_errors }}</div>
                 <div class="panel-body">
@@ -20,7 +20,11 @@
                                 {{ field.errors }}
                                 </div>
                             {% endif %}
-                            {% render_field field class+="form-control" %}
+                            {% if field.label == form.photo.label %}
+                                {{ field }}
+                            {% else %}
+                                {% render_field field class+="form-control" %}
+                            {% endif %}
                         </div>
                     {% endfor %}
 
