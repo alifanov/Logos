@@ -6,23 +6,25 @@ from django.contrib import admin
 admin.autodiscover()
 
 from registration.forms import RegistrationFormUniqueEmail
+from registration.views import RegistrationView
 
 from common.views import HomeView, AddUserView, AddCompetenceView, AddBusinessTypeView, AddUserTagView,\
-    logout_view, LoginView
+    logout_view, LoginView, GetAccessView
 
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', HomeView.as_view(), name='home'),
     url(r'^logout/$', logout_view, name='logout'),
     url(r'^login/$', LoginView.as_view(), name='login'),
+    url(r'^get-access/$', GetAccessView.as_view(), name='get-access'),
     url(r'^user/add/$', AddUserView.as_view(), name='add-user'),
     url(r'^competence/add/$', AddCompetenceView.as_view(), name='add-competence'),
     url(r'^tag/add/$', AddUserTagView.as_view(), name='add-user-tag'),
     url(r'^btype/add/$', AddBusinessTypeView.as_view(), name='add-business-type'),
     # url(r'^Logos/', include('Logos.foo.urls')),
 
-    url(r'^accounts/register/$', 'registration.views.register', {'form': RegistrationFormUniqueEmail}),
-    url(r'^accounts/', include('registration.urls')),
+    url(r'^accounts/register/$', RegistrationView.as_view(form_class=RegistrationFormUniqueEmail)),
+    url(r'^accounts/', include('registration.backends.default.urls')),
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Активировать пользователя</h1>
+        <p>Если ваш контакт уже есть в базе, вы можете получить доступ к нему.
+        Для этого введите ваш email в поле ниже и нажмите "Получить пароль".
+        После этого на ваш email будут высланы логин и пароль для входа в систему.</p>
+        <form method="POST" action="/get-access/" class="form-get-access">{% csrf_token %}
+        {% if activated %}
+            <div class="alert alert-success">
+                На ваш email высланы логин и пароль для входа в систему
+            </div>
+        {% else %}
+            <div class="panel panel-default">
+                <div class="panel-heading">Введите ваш email</div>
+                <div class="panel-body">
+                        <div class="form-group">
+                            <input class="form-control" name="email" />
+                        </div>
+                        <button type="submit" class="btn btn-block btn-primary">Получить пароль</button>
+                </div>
+            </div>
+        {% endif %}
+        </form>
+    </div>
+{% endblock %}

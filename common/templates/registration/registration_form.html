@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="container">
-        <form method="POST" action="/register/" id="form-login">{% csrf_token %}
+        <form method="POST" action="/accounts/register/" id="form-login">{% csrf_token %}
             <div class="panel panel-default">
                 <div class="panel-heading">Регистрация</div>
                 <div class="panel-body">
@@ -12,10 +12,25 @@
                         </div>
                     {% endif %}
                     <div class="form-group">
-                        <input type="text" name="email" class="form-control" placeholder="Email" />
-                        <input type="text" name="username" class="form-control" placeholder="Логин" />
-                        <input type="password" name="password1" class="form-control" placeholder="Пароль" />
-                        <input type="password" name="password2" class="form-control" placeholder="Повтор пароля" />
+                        <div class="form-group">
+                            {% if form.email.errors %}<div class="alert alert-danger text-center">{{ form.email.errors }}</div>{% endif %}
+                            <input type="text" name="email" class="form-control" placeholder="Email" />
+                        </div>
+
+                        <div class="form-group">
+                            {% if form.username.errors %}<div class="alert alert-danger text-center">{{ form.username.errors }}</div>{% endif %}
+                            <input type="text" name="username" class="form-control" placeholder="Логин" />
+                        </div>
+
+                        <div class="form-group">
+                            {% if form.password1.errors %}<div class="alert alert-danger text-center">{{ form.password1.errors }}</div>{% endif %}
+                            <input type="password" name="password1" class="form-control" placeholder="Пароль" />
+                        </div>
+
+                        <div class="form-group">
+                            {% if form.password2.errors %}<div class="alert alert-danger text-center">{{ form.password2.errors }}</div>{% endif %}
+                            <input type="password" name="password2" class="form-control" placeholder="Повтор пароля" />
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
                 </div>

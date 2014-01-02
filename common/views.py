@@ -8,6 +8,10 @@ from pytils.translit import slugify
 from django.http import HttpResponse, HttpResponseRedirect
 from common.models import UserProfile, Competence, BusinessType, UserTag
 from django.db.models import Q
+from django.template.loader import get_template
+from django.template import Context
+from django.core.mail import send_mail
+from django.conf import settings
 
 class LoginView(TemplateView):
     template_name='login.html'
@@ -37,6 +41,36 @@ def logout_view(request):
     return HttpResponseRedirect('/')
 
 # Create your views here.
+class GetAccessView(TemplateView):
+    template_name = 'get-access.html'
+    errors = u''
+    activated = False
+
+    def get_context_data(self, **kwargs):
+        ctx = super(GetAccessView, self).get_context_data(**kwargs)
+        ctx['activated'] = self.activated
+        ctx['errors'] = self.errors
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        email = request.POST.get('email')
+        if email:
+            if User.objects.filter(email=email, is_active=False).count() == 0:
+                self.errors = u'В базе нет неактивных пользователей с таким email'
+            else:
+                user = User.objects.get(email=email, is_active=False)
+                user.is_active=True
+                newpassword = User.objects.make_random_password()
+                user.set_password(newpassword)
+                user.save()
+                self.activated = True
+                # send_email
+                plaintxt = get_template('email/get_access_email.txt')
+                c = Context({'username': user.username, 'password': newpassword})
+                txt = plaintxt.render(c)
+                send_mail(u'Данные для входа в систему', txt, settings.DEFAULT_FROM_EMAIL, [user.email])
+        return self.get(request, *args, **kwargs)
+
 class HomeView(ListView):
     template_name = 'contacts.html'
     search_query = u''

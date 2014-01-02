@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Активация</h1>
-    Привет, {{ account }}!<br/>
-    Ваша учетная запись активирована. <a href="{% url auth_login %}">Заходите</a> на сайт.
-    <br/><br/>
+    <div class="container">
+        <h1>Активация</h1>
+        Привет, {{ account }}!<br/>
+        Ваша учетная запись активирована. <a href="{% url auth_login %}">Заходите</a> на сайт.
+        <br/><br/>
+    </div>
 {% endblock %}
