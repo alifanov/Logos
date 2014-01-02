@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block extra_scripts %}
+    <script type="text/javascript">
+    $(function()
+    {
+        $("select").selectize();
+    })
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+    {% if request.user.is_authenticated %}
+        <h3>Поиск</h3>
+        <form method="GET">
+            <div class="row">
+                <div class="col-md-10">
+                    <input value="{{ active_search_query }}" type="text" name="search_query" class="form-control" placeholder="Введите ключевое слово">
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary btn-block" name="type" value="search">Найти</button>
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-default btn-block" value="reset" name="type">Сброс</button>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-md-4">
+                    <select name="tags">
+                        <option value="">Выберите теги...</option>
+                        {% for tag in tags %}
+                            <option {% if active_tags == tag.slug %} selected="selected"{% endif %} value="{{ tag.slug }}">{{ tag.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select name="btypes">
+                        <option value="">Выберите виды бизнеса...</option>
+                        {% for bt in btypes %}
+                            <option {% if active_btypes == bt.slug %} selected="selected"{% endif %}
+                                    value="{{ bt.slug }}">{{ bt.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select name="competences">
+                        <option value="">Выберите сферы компетенции...</option>
+                        {% for c in competences %}
+                            <option {% if active_competences == c.slug %} selected="selected"{% endif %}
+                                    value="{{ c.slug }}">{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </form>
+
+        <hr />
+
+        <h3>Список контактов</h3>
+        {% for item in users %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {{ item.last_name }} {{ item.first_name }}
+                </div>
+                <div class="panel-body">
+                    Теги: {{ item.profile.get_tags|safe }}
+                    <hr />
+                    Сферы компетенции: {{ item.profile.get_competences|safe }}
+                    <hr />
+                    Виды бизнеса: {{ item.profile.get_btypes|safe }}
+                </div>
+            </div>
+        {% empty %}
+            <p>Нет подходящих записей</p>
+        {% endfor %}
+        {% if is_paginated %}
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li><a href="{{ query_dict }}{{ page_suffix }}{{ page_obj.previous_page_number }}">&laquo;</a></li>
+                {% endif %}
+                {% for page in page_obj.paginator.page_range %}
+                    <li {% if page == page_obj.number %}class="active"{% endif %}>
+                        <a href="{{ query_dict }}{{ page_suffix }}{{ page }}">{{ page }}</a></li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li><a href="{{ query_dict }}{{ page_suffix }}{{ page_obj.next_page_number }}">&raquo;</a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    {% else %}
+        <div class="jumbotron">
+            <h1>Logos</h1>
+            <p>Система контактов начинающих предпринимателей. Предназначена для поиска поставщиков, партнеров, клиентов
+                и исполнителей.</p>
+        </div>
+    {% endif %}
+    </div>
+{% endblock %}

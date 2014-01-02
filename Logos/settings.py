@@ -116,6 +116,14 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
+TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
+                               "django.core.context_processors.debug",
+                               "django.core.context_processors.i18n",
+                               "django.core.context_processors.media",
+                               "django.core.context_processors.static",
+                               "django.core.context_processors.tz",
+                               "django.contrib.messages.context_processors.messages",
+                               "django.core.context_processors.request",)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -131,6 +139,7 @@ INSTALLED_APPS = (
     'south',
     'common',
     'widget_tweaks',
+    'registration',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -161,3 +170,17 @@ LOGGING = {
         },
     }
 }
+
+
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
+
+ACCOUNT_ACTIVATION_DAYS = 2
+
+AUTH_USER_EMAIL_UNIQUE = True
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = 'info@logos.dronedesign.ru'

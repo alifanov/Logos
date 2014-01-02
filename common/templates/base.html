@@ -23,8 +23,26 @@
         <a class="navbar-brand">Logos</a>
     </div>
     <ul class="nav navbar-nav">
-        <li><a href="/">Список контактов</a></li>
-        <li><a href="{% url 'add-user' %}">Добавить контакт</a></li>
+        {% if request.user.is_authenticated %}
+            <li {% if main_active_link %} class="active" {% endif %}><a href="/">Список контактов</a></li>
+            <li {% if add_active_link %} class="active" {% endif %}><a href="{% url 'add-user' %}">Добавить контакт</a></li>
+        {% endif %}
+    </ul>
+    <ul class="nav navbar-nav navbar-right" style="margin-right: 0px;">
+        {% if request.user.is_authenticated %}
+            <li><a href="#">
+                {% if request.user.last_name and request.user.first_name %}
+                    {{ request.user.last_name }} {{ request.user_first_name }}
+                {% else %}
+                    {{ request.user.username }}
+                {% endif %}
+            </a></li>
+            <li>
+                <a href="/logout/" title="Выйти"><span class="glyphicon glyphicon-remove"></span></a>
+            </li>
+        {% else %}
+            <li><a href="{% url 'login' %}">Войти</a></li>
+        {% endif %}
     </ul>
 </nav>
 {% block content %}{% endblock %}
@@ -36,5 +54,6 @@
 <script src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
 
 <script src="{{ STATIC_URL }}/js/custom.js"></script>
+{% block extra_scripts %}{% endblock %}
 </body>
 </html>

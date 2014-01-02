@@ -2,3 +2,8 @@
     max-width: 430px;
     margin: 0 auto;
 }
+
+#form-login {
+    margin: 0 auto;
+    max-width: 330px;
+}

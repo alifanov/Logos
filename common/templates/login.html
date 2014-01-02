@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <form method="POST" action="/login/" id="form-login">{% csrf_token %}
+            <div class="panel panel-default">
+                <div class="panel-heading">Войти в систему</div>
+                <div class="panel-body">
+                    {% if errors %}
+                    <div class="alert alert-danger text-center">
+                        {{ errors }}
+                    </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <input type="text" name="username" class="form-control" placeholder="Логин" />
+                        <input type="password" name="password" class="form-control" placeholder="Пароль" />
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Войти</button>
+                    <hr />
+                    <a href="/accounts/register/">
+                        Зарегистрироваться
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -8,6 +8,7 @@
 $(function()
 {
     $('select#id_competences').selectize({
+        plugins: ['remove_button'],
         create: function(input) {
             var txt, val;
             $.ajax({
@@ -26,6 +27,7 @@ $(function()
         }
     });
     $('select#id_businesstypes').selectize({
+        plugins: ['remove_button'],
         create: function(input) {
             var txt, val;
             $.ajax({
@@ -44,6 +46,7 @@ $(function()
         }
     });
     $('select#id_tags').selectize({
+        plugins: ['remove_button'],
         create: function(input) {
             var txt, val;
             $.ajax({

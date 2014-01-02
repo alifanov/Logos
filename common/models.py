@@ -86,7 +86,7 @@ class UserProfile(models.Model):
     """
     Модель для профайлов пользователя
     """
-    user = models.ForeignKey(User, verbose_name=u'Пользователь')
+    user = models.OneToOneField(User, verbose_name=u'Пользователь', related_name='profile')
     phone = models.CharField(max_length=20, verbose_name=u'Номер телефона')
     rating = models.DecimalField(decimal_places=2, max_digits=5, default=1.0, verbose_name=u'Рейтинг пользователя')
     bTypes = models.ManyToManyField(BusinessType, verbose_name=u'Вид бизнеса', related_name='profiles')
@@ -94,6 +94,18 @@ class UserProfile(models.Model):
 
     def __unicode__(self):
         return self.user.username
+
+    def get_tags(self):
+        tags = [u'<a href="?tags={0}">{1}</a>'.format(tag.slug, tag.name) for tag in self.user.tags.all()]
+        return u','.join(tags)
+
+    def get_btypes(self):
+        btypes = [u'<a href="?btypes={0}">{1}</a>'.format(b.slug, b.name) for b in self.bTypes.all()]
+        return u','.join(btypes)
+
+    def get_competences(self):
+        competences = [u'<a href="?competences={0}">{1}</a>'.format(c.slug, c.name) for c in self.competences.all()]
+        return u','.join(competences)
 
     class Meta:
         verbose_name = u'Профиль пользователя'
