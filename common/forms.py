@@ -39,6 +39,7 @@ class NewUserForm(forms.Form):
     firstname = forms.CharField(help_text=u'Имя', label=u'Имя')
     phone = forms.CharField(help_text=u'Телефон', label=u'Телефон')
     email = forms.EmailField(help_text=u'Email', label=u'Email')
+    vk = forms.CharField(help_text=u'Ссылка на страницу в VK.com', label=u'Ссылка на страницу в VK.com')
     competences = forms.MultipleChoiceField(help_text=u'Сфера компетенции', label=u'Сфера компетенции',
         choices=[(a.name, a.name) for a in Competence.objects.all()], required=False)
     businesstypes = forms.MultipleChoiceField(help_text=u'Вид бизнеса', label=u'Вид бизнеса',

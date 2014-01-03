@@ -172,6 +172,7 @@ class AddUserView(FormView):
         first_name = form.cleaned_data['firstname']
         last_name = form.cleaned_data['lastname']
         phone = form.cleaned_data['phone']
+        vk = form.cleaned_data['vk']
         new_user = User.objects.create_user(
             username=username,
             password=password,
@@ -187,7 +188,8 @@ class AddUserView(FormView):
 
         new_user_profile = UserProfile.objects.create(
             user=new_user,
-            phone=form.cleaned_data['phone']
+            phone=phone,
+            vk=vk
         )
 
         for name in form.cleaned_data['businesstypes']:
@@ -196,8 +198,6 @@ class AddUserView(FormView):
         for name in form.cleaned_data['competences']:
             comp = Competence.objects.get(name=name)
             new_user_profile.competences.add(comp)
-        imageForm = ImageForm(self.request.POST, self.request.FILES, instance=new_user_profile)
-        imageForm.save()
         new_user_profile.save()
         ctx = self.get_context_data()
         ctx['added'] = True

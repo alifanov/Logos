@@ -81,9 +81,12 @@ class UserProfile(models.Model):
     vk = models.CharField(max_length=50, verbose_name=u'Ссылка на ID vk.com')
 
     def save(self, *args, **kwargs):
-        if not self.pk and not self.photo and self.vk:
-            self.updatePhotoFromVKAvatar()
+        is_new = False
+        if not self.pk:
+            is_new = True
         super(UserProfile, self).save(*args, **kwargs)
+        if is_new and not self.photo and self.vk:
+            self.updatePhotoFromVKAvatar()
 
     def updatePhotoFromVKAvatar(self):
         if self.vk:
