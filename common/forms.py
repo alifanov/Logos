@@ -12,7 +12,7 @@ class UpdateUserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UpdateUserForm, self).__init__(*args, **kwargs)
         if self.instance:
-            self.fields['tags'].initial = [str(tag.pk) for tag in self.instance.tags.all()]
+            self.fields['tags'].initial = [str(tag.pk) for tag in self.instance.tags.filter(author=self.instance).all()]
 
     def save(self, *args, **kwargs):
         kwargs.pop('commit', None)
@@ -27,7 +27,7 @@ class UpdateUserForm(forms.ModelForm):
 class UpdateProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('phone', 'photo', 'competences', 'bTypes')
+        fields = ('vk', 'phone', 'photo', 'competences', 'bTypes')
 
 class ImageForm(forms.ModelForm):
     class Meta:
@@ -39,7 +39,6 @@ class NewUserForm(forms.Form):
     firstname = forms.CharField(help_text=u'Имя', label=u'Имя')
     phone = forms.CharField(help_text=u'Телефон', label=u'Телефон')
     email = forms.EmailField(help_text=u'Email', label=u'Email')
-    photo = forms.ImageField(help_text=u'Фото', label=u'Фото')
     competences = forms.MultipleChoiceField(help_text=u'Сфера компетенции', label=u'Сфера компетенции',
         choices=[(a.name, a.name) for a in Competence.objects.all()], required=False)
     businesstypes = forms.MultipleChoiceField(help_text=u'Вид бизнеса', label=u'Вид бизнеса',

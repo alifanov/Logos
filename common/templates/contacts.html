@@ -67,11 +67,24 @@
                     </a>
                 </div>
                 <div class="panel-body">
-                    Теги: {{ item.profile.get_tags|safe }}
-                    <hr />
-                    Сферы компетенции: {{ item.profile.get_competences|safe }}
-                    <hr />
-                    Виды бизнеса: {{ item.profile.get_btypes|safe }}
+                    <div class="row">
+                        <div class="col-md-2">
+                            {% if item.profile.photo %}
+                                <a href="#" class="">
+                                    <img src="{{ MEDIA_URL }}{{ item.profile.photo }}" class="img-thumbnail" />
+                                </a>
+                            {% else %}
+                                <img src="{{ STATIC_URL }}img/user-detail.png" class="img-thumbnail"/>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-10">
+                            Теги: {{ item.profile.get_tags|safe }}
+                            <hr />
+                            Сферы компетенции: {{ item.profile.get_competences|safe }}
+                            <hr />
+                            Виды бизнеса: {{ item.profile.get_btypes|safe }}
+                        </div>
+                    </div>
                 </div>
             </div>
         {% empty %}

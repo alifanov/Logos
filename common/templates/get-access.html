@@ -15,6 +15,11 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Введите ваш email</div>
                 <div class="panel-body">
+                    {% if errors %}
+                        <div class="alert alert-danger">
+                            {{ errors }}
+                        </div>
+                    {% endif %}
                         <div class="form-group">
                             <input class="form-control" name="email" />
                         </div>

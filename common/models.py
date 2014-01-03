@@ -1,7 +1,9 @@
 # coding: utf-8
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.core.files import File
+from bs4 import BeautifulSoup
+import requests, urllib, os
 
 class BusinessType(models.Model):
     """
@@ -31,22 +33,6 @@ class Competence(models.Model):
     class Meta:
         verbose_name = u'Сфера компетенции'
         verbose_name_plural = u'Сферы компетенции'
-
-
-class Tag(models.Model):
-    """
-    Модель для тегов пользователя.
-    Те что он ставит себе сам.
-    """
-    name = models.CharField(max_length=10, verbose_name=u'Тег', unique=True)
-    slug = models.CharField(max_length=20, verbose_name=u'Slug для тега', unique=True)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = u'Тег'
-        verbose_name_plural = u'Теги'
 
 
 class UserTag(models.Model):
@@ -92,6 +78,23 @@ class UserProfile(models.Model):
     bTypes = models.ManyToManyField(BusinessType, verbose_name=u'Вид бизнеса', related_name='profiles')
     competences = models.ManyToManyField(Competence, verbose_name=u'Сфера компетенции', related_name='profiles')
     photo = models.ImageField(upload_to='uploads/', verbose_name=u'Фото', null=True)
+    vk = models.CharField(max_length=50, verbose_name=u'Ссылка на ID vk.com')
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.photo and self.vk:
+            self.updatePhotoFromVKAvatar()
+        super(UserProfile, self).save(*args, **kwargs)
+
+    def updatePhotoFromVKAvatar(self):
+        if self.vk:
+            resp = requests.get(self.vk)
+            soup = BeautifulSoup(resp.text)
+            url = soup.select('#page_avatar a img')[0]['src']
+            result = urllib.urlretrieve(url)
+            self.photo.save(
+                os.path.basename(url),
+                File(open(result[0]))
+            )
 
     def __unicode__(self):
         return self.user.username

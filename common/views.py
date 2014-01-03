@@ -55,6 +55,7 @@ class GetAccessView(TemplateView):
     def post(self, request, *args, **kwargs):
         email = request.POST.get('email')
         if email:
+            print email
             if User.objects.filter(email=email, is_active=False).count() == 0:
                 self.errors = u'В базе нет неактивных пользователей с таким email'
             else:
@@ -69,6 +70,8 @@ class GetAccessView(TemplateView):
                 c = Context({'username': user.username, 'password': newpassword})
                 txt = plaintxt.render(c)
                 send_mail(u'Данные для входа в систему', txt, settings.DEFAULT_FROM_EMAIL, [user.email])
+        else:
+            self.errors = u'Введите email'
         return self.get(request, *args, **kwargs)
 
 class HomeView(ListView):
@@ -210,19 +213,32 @@ class UserDetailView(DetailView):
     template_name = 'user-detail.html'
     context_object_name = 'usr'
 
+
     def get_object(self, queryset=None):
         return User.objects.get(username=self.kwargs['username'])
 
 class PersonalView(TemplateView):
     template_name = 'personal.html'
+    message = u''
 
     def post(self, request, *args, **kwargs):
-        userForm = UpdateUserForm(request.POST, request.FILES, instance=request.user)
-        if userForm.is_valid():
-            userForm.save()
-        profileForm = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
-        if profileForm.is_valid():
-            profileForm.save()
+        if request.POST.get('send_password'):
+            newpassword = User.objects.make_random_password()
+            request.user.set_password(newpassword)
+            request.user.save()
+            plaintxt = get_template('email/get_access_email.txt')
+            c = Context({'username': request.user.username, 'password': newpassword})
+            txt = plaintxt.render(c)
+            self.message = u'Пароль отправлен'
+            send_mail(u'Данные для входа в систему', txt, settings.DEFAULT_FROM_EMAIL, [request.user.email])
+        else:
+            userForm = UpdateUserForm(request.POST, request.FILES, instance=request.user)
+            if userForm.is_valid():
+                userForm.save()
+            profileForm = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+            if profileForm.is_valid():
+                profileForm.save()
+                self.message = u'Данные сохранены'
         return self.get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -232,4 +248,5 @@ class PersonalView(TemplateView):
         userForm = UpdateUserForm(instance=self.request.user)
         ctx['updateForm'] = form
         ctx['userForm'] = userForm
+        ctx['message'] = self.message
         return ctx
