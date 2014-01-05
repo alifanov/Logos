@@ -5,20 +5,20 @@ from common.models import Competence, BusinessType, UserTag, UserProfile
 from django.contrib.auth.models import User
 
 class UpdateUserForm(forms.ModelForm):
-    tags = forms.ModelMultipleChoiceField(
-        queryset=UserTag.objects.all(), required=False
-    )
-
-    def __init__(self, *args, **kwargs):
-        super(UpdateUserForm, self).__init__(*args, **kwargs)
-        if self.instance:
-            self.fields['tags'].initial = [str(tag.pk) for tag in self.instance.tags.filter(author=self.instance).all()]
-
-    def save(self, *args, **kwargs):
-        kwargs.pop('commit', None)
-        u = super(UpdateUserForm, self).save(*args, **kwargs)
-        u.tags.add(*self.cleaned_data['tags'])
-        return u
+#    tags = forms.ModelMultipleChoiceField(
+#        queryset=UserTag.objects.all(), required=False
+#    )
+#
+#    def __init__(self, *args, **kwargs):
+#        super(UpdateUserForm, self).__init__(*args, **kwargs)
+#        if self.instance:
+#            self.fields['tags'].initial = [str(tag.pk) for tag in self.instance.tags.filter(author=self.instance).all()]
+#
+#    def save(self, *args, **kwargs):
+#        kwargs.pop('commit', None)
+#        u = super(UpdateUserForm, self).save(*args, **kwargs)
+#        u.tags.add(*self.cleaned_data['tags'])
+#        return u
 
     class Meta:
         model = User

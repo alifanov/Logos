@@ -167,7 +167,7 @@ class AddUserView(FormView):
         return super(AddUserView, self).form_invalid(form)
 
     def form_valid(self, form):
-        username = u'username{}'.format(User.objects.count()+1)
+        username = u'username{}'.format(User.objects.order_by('-pk')[0].pk + 1)
         password = User.objects.make_random_password()
         first_name = form.cleaned_data['firstname']
         last_name = form.cleaned_data['lastname']
@@ -212,7 +212,6 @@ class UserDetailView(DetailView):
     model = User
     template_name = 'user-detail.html'
     context_object_name = 'usr'
-
 
     def get_object(self, queryset=None):
         return User.objects.get(username=self.kwargs['username'])
