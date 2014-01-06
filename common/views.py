@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.contrib import messages
 from django.views.generic import TemplateView, FormView, View, ListView, DetailView
-from common.forms import NewUserForm, ImageForm, UpdateProfileForm, UpdateUserForm
+from common.forms import NewUserForm, ImageForm, UpdateProfileForm, UpdateUserForm, UpdateTagsForm
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, login, authenticate
 from pytils.translit import slugify
@@ -55,7 +55,6 @@ class GetAccessView(TemplateView):
     def post(self, request, *args, **kwargs):
         email = request.POST.get('email')
         if email:
-            print email
             if User.objects.filter(email=email, is_active=False).count() == 0:
                 self.errors = u'В базе нет неактивных пользователей с таким email'
             else:
@@ -213,6 +212,17 @@ class UserDetailView(DetailView):
     template_name = 'user-detail.html'
     context_object_name = 'usr'
 
+    def post(self, request, *args, **kwargs):
+        form = UpdateTagsForm(request.POST, instance=self.get_object())
+        if form.is_valid():
+            form.save()
+        return self.get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super(UserDetailView, self).get_context_data(**kwargs)
+        ctx['tagsForm'] = UpdateTagsForm(instance=self.get_object())
+        return ctx
+
     def get_object(self, queryset=None):
         return User.objects.get(username=self.kwargs['username'])
 
@@ -242,7 +252,6 @@ class PersonalView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(PersonalView, self).get_context_data(**kwargs)
-        print dir(self.request.user)
         form = UpdateProfileForm(instance=self.request.user.profile)
         userForm = UpdateUserForm(instance=self.request.user)
         ctx['updateForm'] = form

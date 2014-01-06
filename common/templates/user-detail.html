@@ -27,14 +27,25 @@
                             <strong>Email: </strong> {{ usr.email }}
                         </p>
                         <p>
-                            <strong>Теги: </strong> {{ usr.profile.get_tags|safe }}
-                        </p>
-                        <p>
                             <strong>Сфера компетенции: </strong> {{ usr.profile.get_competences|safe }}
                         </p>
                         <p>
                             <strong>Вид бизснеса: </strong> {{ usr.profile.get_btypes|safe }}
                         </p>
+                        <form class="form-horizontal" role="form" method="POST">{% csrf_token %}
+                            <div class="form-group">
+                                <div class="col-md-1">
+                                    <label class="control-label">Теги: </label>
+                                </div>
+                                <div class="col-md-9">
+                                    {{ tagsForm.tags }}
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary">Сохранить теги</button>
+                                </div>
+                            </div>
+                        </form>
+{#                            <strong>Теги: </strong> {{ usr.profile.get_tags|safe }}#}
                     </div>
                 </div>
             </div>
