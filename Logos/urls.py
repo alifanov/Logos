@@ -25,7 +25,7 @@ urlpatterns = patterns('',
     url(r'^btype/add/$', AddBusinessTypeView.as_view(), name='add-business-type'),
     # url(r'^Logos/', include('Logos.foo.urls')),
 
-    url(r'^accounts/register/$', RegistrationView.as_view(form_class=RegistrationFormUniqueEmail)),
+    url(r'^accounts/register/$', RegistrationView.as_view(), kwargs={'form_class':RegistrationFormUniqueEmail}),
     url(r'^accounts/', include('registration.backends.default.urls')),
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
