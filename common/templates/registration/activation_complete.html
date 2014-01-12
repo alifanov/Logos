@@ -2,7 +2,7 @@
 {% block content %}
     <div class="container">
         <h1>Активация</h1>
-        Привет, {{ account }}!<br/>
+        Привет, {{ account.username }}!<br/>
         Ваша учетная запись активирована. <a href="{% url 'auth_login' %}">Заходите</a> на сайт.
         <br/><br/>
     </div>
