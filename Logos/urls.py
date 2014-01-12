@@ -6,7 +6,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 from registration.forms import RegistrationFormUniqueEmail
-from registration.views import RegistrationView
+from registration.backends.default.views import RegistrationView
 
 from common.views import HomeView, AddUserView, AddCompetenceView, AddBusinessTypeView, AddUserTagView,\
     logout_view, LoginView, GetAccessView, UserDetailView, PersonalView
@@ -28,7 +28,7 @@ urlpatterns = patterns('',
     url(r'^accounts/register/$', RegistrationView.as_view(), kwargs={'form_class':RegistrationFormUniqueEmail}),
     url(r'^accounts/', include('registration.backends.default.urls')),
     # Uncomment the admin/doc line below to enable admin documentation:
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+#    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
