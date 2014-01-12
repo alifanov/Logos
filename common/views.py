@@ -80,7 +80,7 @@ class HomeView(ListView):
     competences = u''
     tags = u''
     qd = u''
-    paginate_by = 2
+    paginate_by = 10
     model = User
     context_object_name = 'users'
 
