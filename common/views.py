@@ -1,5 +1,5 @@
 # coding: utf-8
-from django.contrib import messages
+import json
 from django.views.generic import TemplateView, FormView, View, ListView, DetailView
 from common.forms import NewUserForm, ImageForm, UpdateProfileForm, UpdateUserForm, UpdateTagsForm
 from django.contrib.auth.models import User
@@ -155,7 +155,7 @@ class AddUserTagView(View):
         if tag:
             c = UserTag.objects.create(name=tag, slug=slugify(tag), author=request.user)
             resp = u'[{}, {}]'.format(c.pk, c.name)
-        return HttpResponse(resp)
+        return HttpResponse(json.dumps(resp))
 
 class AddUserView(FormView):
     template_name = 'add-contact.html'
