@@ -155,7 +155,7 @@ class AddUserTagView(View):
         if tag:
             c = UserTag.objects.create(name=tag, slug=slugify(tag), author=request.user)
             resp =  [c.pk, c.name]
-        return HttpResponse(json.dumps(resp))
+        return HttpResponse(json.dumps(resp), content_type='application/json')
 
 class AddUserView(FormView):
     template_name = 'add-contact.html'
