@@ -154,7 +154,7 @@ class AddUserTagView(View):
         resp = u''
         if tag:
             c = UserTag.objects.create(name=tag, slug=slugify(tag), author=request.user)
-            resp = u'[{}, {}]'.format(c.name, c.name)
+            resp = u'[{}, {}]'.format(c.pk, c.name)
         return HttpResponse(resp)
 
 class AddUserView(FormView):

@@ -56,6 +56,7 @@ $(function()
                 success: function(resp){
                     txt = resp[1];
                     val = resp[0];
+                    $("select#id_tags option[value='" + txt + "']").val(val);
                 }
             });
             return {
